@@ -55,8 +55,8 @@ def main():
 
     # 真値と観測値をcsvに保存
     # 既に作ったので一旦コメントアウト
-    # np.savetxt('out/u_obs.csv', u_obs, delimiter=',')
-    # np.savetxt('out/u_true.csv', u_true, delimiter=',')
+    np.savetxt('out/u_obs.csv', u_obs, delimiter=',')
+    np.savetxt('out/u_true.csv', u_true, delimiter=',')
     
     
     
