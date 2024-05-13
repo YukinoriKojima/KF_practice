@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 
 def Model(x:np.ndarray) -> np.ndarray:
     """
-    理想的なモデル．各状態変数は前の状態の2倍になる
+    理想的なモデル．各状態変数は前の状態の1.003倍になる
     """
     F = np.array([[1.003,0,0],
                  [0,1.003,0],
