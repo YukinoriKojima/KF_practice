@@ -11,8 +11,11 @@ def Model(x:np.ndarray) -> np.ndarray:
                  [0,0,1.003]])
     return F@x
 
+def get_error(m: np.ndarray, N: int)->np.ndarray:
+    return m @ (np.eye(N)-np.full((N, N), 1/N))
+
 def get_cov(m: np.ndarray, N: int)->np.ndarray:
-    m_ = m @ (np.eye(N)-np.full((N, N), 1/N))
+    m_ = get_error(m, N)
     return m_@m_.T/(N-1)
     
 
@@ -50,10 +53,12 @@ def main():
     
     for time in range(1, time_step):
         A_f = Model(A_ini)
-        P_f = get_cov(A_f, N)
+        # P_f = get_cov(A_f, N)
+        Z = get_error(A_f, N)/((N-1)**0.5)
+        Y = get_error(H@A_f, N)/((N-1)**0.5)
         drand = np.random.standard_normal((2, N))
-        A_ini = A_f + P_f@H.T@np.linalg.inv((H@P_f@H.T+R))@ \
-                (np.tile(obs[:,time:time+1], (1, N)) + drand - H@A_f)
+        K = Z@Y.T@np.linalg.inv(Y@Y.T+R)
+        A_ini = A_f + K@(np.tile(obs[:,time:time+1], (1, N)) + drand - H@A_f)
         each_member[:, time:time+1] = A_ini[0:1, :].T
         A_ini_open = Model(A_ini_open)
         open_list.append(A_ini_open[0,0])
@@ -72,9 +77,9 @@ def main():
     ax.plot(mean_of_member, color='red')
     ax.plot(n_true[0], color='blue')
     ax.plot(open_list, color='green')
-    plt.show()
-
-
+    plt.savefig('out/line_plot.png')
+    plt.close()
+    
 if __name__ == '__main__':
     main()
     
