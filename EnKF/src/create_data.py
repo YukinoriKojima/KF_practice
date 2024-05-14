@@ -1,8 +1,9 @@
 from random import gauss
 import numpy as np
 import matplotlib.pyplot as plt
+from lorenz96 import Lorenz96, bulk_Lorenz96
 
-def Model(x:np.ndarray) -> np.ndarray:
+def Model_example(x:np.ndarray) -> np.ndarray:
     """
     理想的なモデル．各状態変数は前の状態の2倍になる
     """
@@ -20,12 +21,12 @@ def main():
     # タイムステップは400まで
     # code上は0~399
     time_step = 400
-    
+    Model:function = Lorenz96
     
     # 真値の作成
     # u_t+1 = 1.003*u_t+誤差項(~N(0,1))    
     u_true = np.zeros((3, 400))
-    init = [[0+gauss()], [2+gauss()], [4+gauss()]]
+    init = [[10+gauss()], [20+gauss()], [30+gauss()]]
     print(init)
     u_true[:, 0:1] = np.array(init)
     

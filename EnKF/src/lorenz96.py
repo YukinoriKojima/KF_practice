@@ -12,7 +12,7 @@ def Runge_Kutta(u:np.ndarray, dt:float, dif_func):
     du += (s1 + s2*2 + s3*2 + s4) * (dt / 6)
     return du
 
-def Lorenz96(u_ini:np.ndarray=np.ones((40,1)), F:float=8)->np.ndarray:
+def Lorenz96(u_ini:np.ndarray=np.ones((40,1)), F:float=0.6)->np.ndarray:
     """
     input: u_t(state matrix at time t, dtype:numpy.ndarray(N, 1)),
     F(ext. force term in L96)
@@ -29,6 +29,13 @@ def Lorenz96(u_ini:np.ndarray=np.ones((40,1)), F:float=8)->np.ndarray:
         return f
     
     return Runge_Kutta(u_ini, 0.05, L96_dif_func)    
+
+def bulk_Lorenz96(E:np.ndarray):
+    for i in range(int(E.shape[1])):
+        E[:, i:i+1] = Lorenz96(E[:, i:i+1])
+    return E
+        
+    
 
 if __name__ == '__main__':
     u1_list, u2_list, u3_list = [], [], []
